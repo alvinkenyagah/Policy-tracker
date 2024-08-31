@@ -148,6 +148,7 @@ const deletePolicy = async (id) => {
       <table>
         <thead>
           <tr>
+          <th onClick={() => requestSort('createdAt')}>serial</th>
             <th onClick={() => requestSort('client')}>Client</th>
             <th onClick={() => requestSort('policyno')}>Policy No</th>
             <th onClick={() => requestSort('registration')}>Registration</th>
@@ -155,7 +156,7 @@ const deletePolicy = async (id) => {
             <th onClick={() => requestSort('expire')}>Expire Date</th>
             <th>Days Left</th>
             <th>Days Since Expired</th>
-            <th>Actions</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -165,6 +166,7 @@ const deletePolicy = async (id) => {
 
             return (
               <tr key={policy._id}>
+                <tr>{new Date(policy.createdAt).toLocaleDateString()}</tr>
                 <td>{policy.client}</td>
                 <td>{policy.policyno}</td>
                 <td>{policy.registration}</td>
@@ -172,9 +174,7 @@ const deletePolicy = async (id) => {
                 <td>{new Date(policy.expire).toLocaleDateString()}</td>
                 <td>{daysLeft >= 0 ? daysLeft : '-'}</td>
                 <td style={{color:"red"}}>{daysSinceExpired || '-'}</td>
-                <td>
-                  <button onClick={() => deletePolicy(policy._id)}>Delete</button>
-                </td>
+                <td onClick={() => deletePolicy(policy._id)}></td>
               </tr>
             );
           })}
