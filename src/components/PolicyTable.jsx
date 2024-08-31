@@ -8,7 +8,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
 
   useEffect(() => {
     if (!policies.length) {
-      fetch('http://localhost:3000/api/transactions')
+      fetch('https://insurance-nodejs-server.onrender.com/api/transactions')
         .then(response => response.json())
         .then(data => setPolicies(data))
         .catch(error => console.error('Error fetching data:', error));
@@ -26,7 +26,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
       });
 
       if (confirmDeletion) {
-        const response = await fetch(`http://localhost:3000/api/transactions/${id}`, {
+        const response = await fetch(`https://insurance-nodejs-server.onrender.com/api/transactions/${id}`, {
           method: 'DELETE',
         });
         if (response.ok) {
