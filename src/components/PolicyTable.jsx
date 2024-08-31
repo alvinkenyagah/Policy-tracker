@@ -96,6 +96,7 @@ const deletePolicy = async (id) => {
       />
 
     <div>
+      <br/>
     <style>
   {`
   .table-container {
@@ -181,7 +182,7 @@ const deletePolicy = async (id) => {
         </tbody>
       </table>
       </div>
-    </div>
+    </div> 
   );
 };
 
