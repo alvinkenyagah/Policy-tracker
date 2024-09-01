@@ -27,7 +27,6 @@
 // //     }
 // //   };
 
-
 // const handleLogin = async () => {
 //     try {
 //       const response = await fetch('https://insurance-nodejs-server.onrender.com/api/auth/login', {
@@ -37,11 +36,11 @@
 //         },
 //         body: JSON.stringify({ username, password }),
 //       });
-  
+
 //       if (!response.ok) {
 //         throw new Error('Invalid username or password');
 //       }
-  
+
 //       const data = await response.json();
 //       localStorage.setItem('token', data.token);
 //       onLoginSuccess(); // Notify App component about successful login
@@ -50,8 +49,6 @@
 //       setError(error.message);
 //     }
 //   };
-  
-
 
 //   return (
 //     <div>
@@ -126,7 +123,7 @@
 // }
 
 //                 `
-//                } 
+//                }
 //             </style>
 //         </div>
 //       <input
@@ -148,36 +145,45 @@
 
 // export default LoginComponent;
 
-
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const LoginComponent = ({ onLoginSuccess }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false); // Loading state
-  const [error, setError] = useState(''); // Error state
+  const [error, setError] = useState(""); // Error state
+
+  // TOGGLE PASSWORD VISIBILITY
+  const [passwordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
 
   const handleLogin = async () => {
     setLoading(true); // Start loading
-    setError(''); // Clear previous error
+    setError(""); // Clear previous error
     try {
-      const response = await fetch('https://insurance-nodejs-server.onrender.com/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
+      const response = await fetch(
+        "https://insurance-nodejs-server.onrender.com/api/auth/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username, password }),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Invalid username or password');
+        throw new Error("Invalid username or password");
       }
 
       const data = await response.json();
-      localStorage.setItem('token', data.token);
+      localStorage.setItem("token", data.token);
       onLoginSuccess(); // Notify App component about successful login
     } catch (error) {
-      console.error('Login failed:', error);
+      console.error("Login failed:", error);
       setError(error.message);
     } finally {
       setLoading(false); // Stop loading
@@ -189,9 +195,8 @@ const LoginComponent = ({ onLoginSuccess }) => {
       <h2>Login</h2>
       {error && <div className="error-message">{error}</div>}
       <div>
-            <style>
-               {
-                `
+        <style>
+          {`
                 /* Global Styles */
 body {
   font-family: Arial, sans-serif;
@@ -235,7 +240,7 @@ input[type="password"]:focus {
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-button {
+.login-btn {
   width: 100%;
   padding: 10px;
   background-color: #007bff;
@@ -258,10 +263,9 @@ button:hover {
   font-size: 14px;
 }
 
-                `
-               } 
-            </style>
-        </div>
+                `}
+        </style>
+      </div>
       <input
         type="text"
         value={username}
@@ -269,19 +273,38 @@ button:hover {
         placeholder="Username"
         disabled={loading}
       />
-      <input
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-        disabled={loading}
-      />
-      <button onClick={handleLogin} disabled={loading}>
-        {loading ? 'Logging in...' : 'Login'}
+
+      <div
+        style={{ position: "relative", display: "flex", alignItems: "center" }}
+      >
+        <input
+          type={passwordVisible ? "text" : "password"}
+          placeholder="Enter your password"
+          style={{ paddingRight: "40px" }}
+          onChange={(e) => setPassword(e.target.value)}
+          disabled={loading}
+        />
+        <button
+          onClick={togglePasswordVisibility}
+          style={{
+            position: "absolute",
+            right: "10px",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "14px",
+            color: "#007bff",
+          }}
+        >
+          {passwordVisible ? "Hide" : "Show"}
+        </button>
+      </div>
+
+      <button onClick={handleLogin} disabled={loading} className="login-btn">
+        {loading ? "Logging in..." : "Login"}
       </button>
     </div>
   );
 };
 
 export default LoginComponent;
-
