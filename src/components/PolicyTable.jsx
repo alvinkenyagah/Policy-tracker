@@ -8,7 +8,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
 
   useEffect(() => {
     if (!policies.length) {
-      fetch('https://insurance-nodejs-server.onrender.com/api/transactions')
+      fetch('http://localhost:3000/api/transactions')
         .then(response => response.json())
         .then(data => setPolicies(data))
         .catch(error => console.error('Error fetching data:', error));
