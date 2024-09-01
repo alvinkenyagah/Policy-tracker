@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import PolicyForm from "../components/PolicyForm";
+import PolicyForm from "../components/policyForm";
 import PolicyTable from "../components/PolicyTable";
+
 
 function HomePage() {
   const [policies, setPolicies] = useState([]);
