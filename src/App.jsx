@@ -1,39 +1,21 @@
-// // src/App.js
-// import React from 'react';
-// import PolicyTable from './components/PolicyTable';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <h1>Policy Management</h1>
-//       <PolicyTable />
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-// src/App.js
 import React, { useState } from 'react';
-// import PolicyTable from './components/PolicyTable';
-// import PolicyForm from './components/PolicyForm';
+import HomePage from './pages/HomePage.jsx';
+import LoginComponent from './components/LoginComponent.jsx';
 
-import PolicyTable from './components/PolicyTable';
-import PolicyForm from './components/policyForm';
 function App() {
-  const [policies, setPolicies] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const addPolicy = (newPolicy) => {
-    setPolicies([...policies, newPolicy]);
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
   };
 
   return (
-    <div className="App">
-      <h1>Policy Management</h1>
-      <PolicyForm onPolicyAdded={addPolicy} />
-      <br/>
-      <PolicyTable policies={policies} setPolicies={setPolicies} />
+    <div>
+      {isLoggedIn ? (
+        <HomePage />
+      ) : (
+        <LoginComponent onLoginSuccess={handleLoginSuccess} />
+      )}
     </div>
   );
 }
