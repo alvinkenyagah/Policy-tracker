@@ -1,4 +1,3 @@
-// src/components/PolicyForm.js
 import React, { useState } from "react";
 
 const PolicyForm = ({ onPolicyAdded }) => {
@@ -19,17 +18,20 @@ const PolicyForm = ({ onPolicyAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem('token'); // Assuming you store the JWT token in localStorage
+
       const response = await fetch("https://insurance-nodejs-server.onrender.com/api/transactions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // Include the JWT token
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
         const newPolicy = await response.json();
-        onPolicyAdded(newPolicy); // Call the callback to update the policy table
+        onPolicyAdded(newPolicy);
         setFormData({
           client: "",
           policyno: "",

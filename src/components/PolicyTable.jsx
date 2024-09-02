@@ -4,16 +4,23 @@ import swal from 'sweetalert';
 const PolicyTable = ({ policies, setPolicies }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState(null);
-  const [selectedClient, setSelectedClient] = useState(null); // New state to track selected client
+  const [selectedClient, setSelectedClient] = useState(null);
 
   useEffect(() => {
     if (!policies.length) {
-      fetch('http://localhost:3000/api/transactions')
+      const token = localStorage.getItem('token'); // Assuming you store the JWT token in localStorage
+
+      fetch('https://insurance-nodejs-server.onrender.com/api/transactions', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
         .then(response => response.json())
         .then(data => setPolicies(data))
         .catch(error => console.error('Error fetching data:', error));
     }
   }, [policies, setPolicies]);
+
 
   const deletePolicy = async (id) => {
     try {
