@@ -15,6 +15,36 @@ const LoginComponent = ({ onLoginSuccess }) => {
     setPasswordVisible(!passwordVisible);
   };
 
+  // const handleLogin = async () => {
+  //   setLoading(true); // Start loading
+  //   setError(""); // Clear previous error
+  //   try {
+  //     const response = await fetch(
+  //       "https://insurance-nodejs-server.onrender.com/api/auth/login",
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ username, password }),
+  //       }
+  //     );
+
+  //     if (!response.ok) {
+  //       throw new Error("Invalid username or password");
+  //     }
+
+  //     const data = await response.json();
+  //     localStorage.setItem("token", data.token);
+  //     onLoginSuccess(); // Notify App component about successful login
+  //   } catch (error) {
+  //     console.error("Login failed:", error);
+  //     setError(error.message);
+  //   } finally {
+  //     setLoading(false); // Stop loading
+  //   }
+  // };
+
   const handleLogin = async () => {
     setLoading(true); // Start loading
     setError(""); // Clear previous error
@@ -29,14 +59,14 @@ const LoginComponent = ({ onLoginSuccess }) => {
           body: JSON.stringify({ username, password }),
         }
       );
-
+  
       if (!response.ok) {
         throw new Error("Invalid username or password");
       }
-
+  
       const data = await response.json();
-      localStorage.setItem("token", data.token);
-      onLoginSuccess(); // Notify App component about successful login
+      localStorage.setItem("token", data.token); // Store the token in localStorage
+      onLoginSuccess(data.token); // Pass the token to the App component
     } catch (error) {
       console.error("Login failed:", error);
       setError(error.message);
@@ -44,6 +74,7 @@ const LoginComponent = ({ onLoginSuccess }) => {
       setLoading(false); // Stop loading
     }
   };
+  
 
   return (
     <div className="container">

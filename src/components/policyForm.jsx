@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import swal from 'sweetalert';
 const PolicyForm = ({ onPolicyAdded }) => {
   const [formData, setFormData] = useState({
     client: "",
@@ -15,20 +15,21 @@ const PolicyForm = ({ onPolicyAdded }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem('token'); // Assuming you store the JWT token in localStorage
-
+      const token = localStorage.getItem('token');
+  
       const response = await fetch("https://insurance-nodejs-server.onrender.com/api/transactions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // Include the JWT token
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (response.ok) {
         const newPolicy = await response.json();
         onPolicyAdded(newPolicy);
@@ -40,13 +41,21 @@ const PolicyForm = ({ onPolicyAdded }) => {
           start: "",
           expire: "",
         });
+  
+        // Show success alert
+        swal("Success!", "Policy has been created successfully.", "success");
       } else {
         console.error("Failed to create policy");
+        // Show error alert
+        swal("Failed", "Unable to create the policy. Please try again.", "error");
       }
     } catch (error) {
       console.error("Error creating policy:", error);
+      // Show error alert
+      swal("Error", "An error occurred while creating the policy. Please try again later.", "error");
     }
   };
+
 
   return (
     <>
