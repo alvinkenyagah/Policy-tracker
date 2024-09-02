@@ -23,6 +23,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
 
 
   const deletePolicy = async (id) => {
+    const token = localStorage.getItem('token');
     try {
       const confirmDeletion = await swal({
         title: "Are you sure?",
@@ -34,6 +35,9 @@ const PolicyTable = ({ policies, setPolicies }) => {
 
       if (confirmDeletion) {
         const response = await fetch(`https://insurance-nodejs-server.onrender.com/api/transactions/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
           method: 'DELETE',
         });
         if (response.ok) {
