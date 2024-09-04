@@ -5,6 +5,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortConfig, setSortConfig] = useState(null);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedRegistration, setSelectedRegistration] = useState(null);
 
   useEffect(() => {
     if (!policies.length) {
@@ -67,13 +68,15 @@ const PolicyTable = ({ policies, setPolicies }) => {
     return Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
   };
 
-  const filteredPolicies = policies
-    .filter(policy =>
-      (policy.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        policy.policyno.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        policy.registration.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (selectedClient ? policy.client === selectedClient : true) // Apply client filter if selectedClient is not null
-    );
+    const filteredPolicies = policies
+  .filter(policy =>
+    (policy.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      policy.policyno.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      policy.registration.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (selectedClient ? policy.client === selectedClient : true) && // Apply client filter if selectedClient is not null
+    (selectedRegistration ? policy.registration === selectedRegistration : true) // Apply registration filter if selectedRegistration is not null
+  );
+
 
   const sortedPolicies = [...filteredPolicies].sort((a, b) => {
     if (sortConfig !== null) {
@@ -99,7 +102,13 @@ const PolicyTable = ({ policies, setPolicies }) => {
 
   const handleClientClick = (client) => {
     setSelectedClient(client === selectedClient ? null : client); // Toggle the client selection
+
   };
+
+  const handleRegistrationClick = (registration) => {
+    setSelectedRegistration(registration === selectedRegistration ? null : registration);
+  }
+
 
   return (
     <div>
@@ -178,7 +187,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
                   <td>{new Date(policy.createdAt).toLocaleDateString()}</td>
                   <td onClick={() => handleClientClick(policy.client)}>{policy.client}</td>
                   <td>{policy.policyno}</td>
-                  <td>{policy.registration}</td>
+                  <td onClick={() => handleRegistrationClick(policy.registration)}>{policy.registration}</td>
                   <td>{new Date(policy.start).toLocaleDateString()}</td>
                   <td>{new Date(policy.expire).toLocaleDateString()}</td>
                   <td>{daysLeft >= 0 ? daysLeft : '-'}</td>
