@@ -174,7 +174,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
               <th onClick={() => requestSort('expire')}>Expire Date</th>
               <th>Days Left</th>
               <th>Days Since Expired</th>
-              <th></th>
+              {/* <th></th> */}
             </tr>
           </thead>
           <tbody>
@@ -192,7 +192,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
                   <td>{new Date(policy.expire).toLocaleDateString()}</td>
                   <td>{daysLeft >= 0 ? daysLeft : '-'}</td>
                   <td style={{ color: "red" }}>{daysSinceExpired || '-'}</td>
-                  <td onClick={() => deletePolicy(policy._id)}></td>
+                  {/* <td onClick={() => deletePolicy(policy._id)}></td> */}
                 </tr>
               );
             })}
