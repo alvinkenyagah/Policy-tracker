@@ -167,7 +167,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
           <thead>
             <tr>
               <th onClick={() => requestSort('createdAt')}>Serial</th>
-              <th onClick={() => requestSort('client')}>Client</th>
+              {/* <th onClick={() => requestSort('client')}>Client</th> */}
               <th onClick={() => requestSort('policyno')}>Policy No</th>
               <th onClick={() => requestSort('registration')}>Registration</th>
               <th onClick={() => requestSort('start')}>Start Date</th>
@@ -185,7 +185,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
               return (
                 <tr key={policy._id}>
                   <td>{new Date(policy.createdAt).toLocaleDateString()}</td>
-                  <td onClick={() => handleClientClick(policy.client)}>{policy.client}</td>
+                  {/* <td onClick={() => handleClientClick(policy.client)}>{policy.client}</td> */}
                   <td>{policy.policyno}</td>
                   <td onClick={() => handleRegistrationClick(policy.registration)}>{policy.registration}</td>
                   <td>{new Date(policy.start).toLocaleDateString()}</td>
