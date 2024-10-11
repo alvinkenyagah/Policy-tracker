@@ -185,14 +185,14 @@ const PolicyTable = ({ policies, setPolicies }) => {
               return (
                 <tr key={policy._id}>
                   <td>{new Date(policy.createdAt).toLocaleDateString()}</td>
-                  {/* <td onClick={() => handleClientClick(policy.client)}>{policy.client}</td> */}
+                  <td onClick={() => handleClientClick(policy.client)}>{policy.client}</td> 
                   <td>{policy.policyno}</td>
                   <td onClick={() => handleRegistrationClick(policy.registration)}>{policy.registration}</td>
                   <td>{new Date(policy.start).toLocaleDateString()}</td>
                   <td>{new Date(policy.expire).toLocaleDateString()}</td>
                   <td>{daysLeft >= 0 ? daysLeft : '-'}</td>
                   <td style={{ color: "red" }}>{daysSinceExpired || '-'}</td>
-                  {/* <td onClick={() => deletePolicy(policy._id)}></td> */}
+                  <td onClick={() => deletePolicy(policy._id)}></td>
                 </tr>
               );
             })}
