@@ -167,7 +167,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
           <thead>
             <tr>
               <th onClick={() => requestSort('createdAt')}>Serial</th>
-              {/* <th onClick={() => requestSort('client')}>Client</th> */}
+              <th onClick={() => requestSort('client')}>Client</th>
               <th onClick={() => requestSort('policyno')}>Policy No</th>
               <th onClick={() => requestSort('registration')}>Registration</th>
               <th onClick={() => requestSort('start')}>Start Date</th>
