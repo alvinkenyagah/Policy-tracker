@@ -174,7 +174,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
               <th onClick={() => requestSort('expire')}>Expire Date</th>
               <th>Days Left</th>
               <th>Days Since Expired</th>
-              {/* <th></th> */}
+              <th></th>
             </tr>
           </thead>
           <tbody>
