@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 form {
   max-width: 400px;
   margin: 0 auto;
@@ -51,4 +53,15 @@ select:focus {
 .post-btn:hover {
   background-color: #0056b3;
 }
+
+
+
+
+
+
+
+
+
+
+
 
