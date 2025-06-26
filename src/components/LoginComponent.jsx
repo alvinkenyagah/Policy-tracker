@@ -33,8 +33,6 @@ const LoginComponent = ({ onLoginSuccess }) => {
       }
   
       const data = await response.json();
-      // Note: localStorage is not available in Claude artifacts
-      // localStorage.setItem("token", data.token);
       onLoginSuccess(data.token);
     } catch (error) {
       console.error("Login failed:", error);
@@ -93,14 +91,18 @@ const LoginComponent = ({ onLoginSuccess }) => {
           <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
             {/* Username Field */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+              <span className="flex items-center gap-1">
+                <User className="w-5 h-5" />
                 Username
-              </label>
+              </span>
+            </label>
+
               <div className="relative">
                 <div className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors duration-200 ${
                   focusedField === 'username' ? 'text-blue-600' : 'text-gray-400'
                 }`}>
-                  <User className="w-5 h-5" />
+                  
                 </div>
                 <input
                   id="username"
@@ -126,13 +128,16 @@ const LoginComponent = ({ onLoginSuccess }) => {
             {/* Password Field */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+              <span className="flex items-center gap-1">
+                  <Lock className="w-5 h-5" />
                 Password
+                </span>
               </label>
               <div className="relative">
                 <div className={`absolute left-3 top-1/2 transform -translate-y-1/2 transition-colors duration-200 ${
                   focusedField === 'password' ? 'text-blue-600' : 'text-gray-400'
                 }`}>
-                  <Lock className="w-5 h-5" />
+
                 </div>
                 <input
                   id="password"

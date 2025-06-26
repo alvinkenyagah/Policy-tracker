@@ -128,10 +128,12 @@ const PolicyForm = ({ onPolicyAdded }) => {
           {/* Client Name */}
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-700">
+            <span className="flex items-center gap-1"> <User className=" h-5 w-5 text-gray-400" />
               Client Name
+              </span>
             </label>
             <div className="relative">
-              <User className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+
               <input
                 type="text"
                 name="client"
@@ -153,10 +155,14 @@ const PolicyForm = ({ onPolicyAdded }) => {
           {/* Policy Number */}
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-700">
-              Policy Number
+               <span className="flex items-center gap-1">
+                <FileText className="h-5 w-5 text-gray-400" />
+                Policy Number
+               </span>
+              
             </label>
             <div className="relative">
-              <FileText className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              
               <input
                 type="text"
                 name="policyno"
@@ -178,10 +184,13 @@ const PolicyForm = ({ onPolicyAdded }) => {
           {/* Registration */}
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-700">
+               <span className="flex items-center gap-1">
+              <Car className="h-5 w-5 text-gray-400" />
               Vehicle Registration
+              </span>
             </label>
             <div className="relative">
-              <Car className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              
               <input
                 type="text"
                 name="registration"
@@ -203,10 +212,13 @@ const PolicyForm = ({ onPolicyAdded }) => {
           {/* Classification */}
           <div className="space-y-2">
             <label className="block text-sm font-semibold text-gray-700">
-              Policy Classification
+              <span className="flex items-center gap-1">
+                <Shield className="h-5 w-5 text-gray-400" />
+                Policy Classification
+              </span>
             </label>
             <div className="relative">
-              <Shield className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              
               <select
                 name="classification"
                 value={formData.classification}
@@ -237,10 +249,13 @@ const PolicyForm = ({ onPolicyAdded }) => {
             {/* Start Date */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-700">
-                Start Date
+                 <span className="flex items-center gap-1">
+                  <Calendar className="h-5 w-5 text-gray-400" />
+                   Start Date
+                 </span>       
               </label>
               <div className="relative">
-                <Calendar className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                
                 <input
                   type="date"
                   name="start"
@@ -261,10 +276,12 @@ const PolicyForm = ({ onPolicyAdded }) => {
             {/* Expire Date */}
             <div className="space-y-2">
               <label className="block text-sm font-semibold text-gray-700">
-                Expiry Date
+                 <span className="flex items-center gap-1">
+                  <Calendar className="h-5 w-5 text-gray-400" />
+                   Expirey Date
+                 </span>       
               </label>
               <div className="relative">
-                <CalendarX className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                   type="date"
                   name="expire"
