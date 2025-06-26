@@ -3,13 +3,13 @@ import { LogOut, Shield } from "lucide-react";
 
 const Navbar = ({ onLogout }) => {
   const handleLogout = () => {
-    // Using native confirm for demo since sweetalert isn't available
     if (window.confirm("Are you sure you want to logout?")) {
-      // Note: localStorage would be removed in real app
+      localStorage.removeItem("token"); 
       onLogout();
       alert("Logged out successfully!");
     }
   };
+
 
   return (
     <nav className="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 backdrop-blur-sm border-b border-slate-600/30 shadow-xl sticky top-0 z-50">

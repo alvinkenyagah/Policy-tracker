@@ -33,6 +33,7 @@ const LoginComponent = ({ onLoginSuccess }) => {
       }
   
       const data = await response.json();
+      localStorage.setItem("token", data.token);
       onLoginSuccess(data.token);
     } catch (error) {
       console.error("Login failed:", error);
