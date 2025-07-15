@@ -384,7 +384,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
 
                 return (
                   <div key={policy._id} className="p-4 bg-white hover:bg-blue-50 transition-colors duration-200">
-                    <div className="flex items-center justify-between">
+                    <div className="flex-col md:flex-row">
                       <div className="flex-1">
 
 
@@ -422,7 +422,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
 
 
                       </div>
-                      <div className="flex flex-col items-end">
+                      <div className="flex ">
                         <div
                           className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold shadow-sm border mb-2"
                           style={{
