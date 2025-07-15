@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, ChevronUp, ChevronDown, Trash2, Filter, X, Calendar, Users, FileText, Car, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
+import { Search, ChevronUp, ChevronDown, Trash2, Filter, X, Calendar, Users, FileText, Car, AlertTriangle, CheckCircle, Clock, MoreVertical } from 'lucide-react';
 import swal from 'sweetalert';
 
 const PolicyTable = ({ policies, setPolicies }) => {
@@ -10,6 +10,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [expandedPolicy, setExpandedPolicy] = useState(null); // State to manage expanded card
 
   useEffect(() => {
     if (!policies.length) {
@@ -93,10 +94,10 @@ const PolicyTable = ({ policies, setPolicies }) => {
       const matchesSearch = policy.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
         policy.policyno.toLowerCase().includes(searchTerm.toLowerCase()) ||
         policy.registration.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
       const matchesClient = selectedClient ? policy.client === selectedClient : true;
       const matchesRegistration = selectedRegistration ? policy.registration === selectedRegistration : true;
-      
+
       let matchesStatus = true;
       if (selectedStatus) {
         const daysLeft = calculateDaysLeft(policy.expire);
@@ -108,15 +109,14 @@ const PolicyTable = ({ policies, setPolicies }) => {
           matchesStatus = daysLeft < 0;
         }
       }
-      
+
       return matchesSearch && matchesClient && matchesRegistration && matchesStatus;
     });
 
   const sortedPolicies = [...filteredPolicies].sort((a, b) => {
     if (sortConfig !== null) {
       let aValue, bValue;
-      
-      // Handle status sorting by days left
+
       if (sortConfig.key === 'status') {
         aValue = calculateDaysLeft(a.expire);
         bValue = calculateDaysLeft(b.expire);
@@ -124,7 +124,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
         aValue = a[sortConfig.key];
         bValue = b[sortConfig.key];
       }
-      
+
       if (aValue < bValue) {
         return sortConfig.direction === 'ascending' ? -1 : 1;
       }
@@ -208,28 +208,26 @@ const PolicyTable = ({ policies, setPolicies }) => {
         {/* Search and Filters */}
         <div className="p-6 border-b border-gray-200">
           <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
-            <label className="block text-sm font-semibold text-gray-700">
-              <span className="flex items-center gap-1">
+            <label className="block text-sm font-semibold text-gray-700 w-full md:w-auto">
+              <span className="flex items-center gap-1 mb-2 md:mb-0">
                 <Search className="h-5 w-5 text-gray-400" />
                 Search
-
-                {/* Search */}
-                <div className="relative flex-1 max-w-md">
-                  <input
-                    type="text"
-                    placeholder="Search by client, policy no, or registration..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  />
-                </div>
-              </span>       
+              </span>
+              <div className="relative flex-1 max-w-md w-full">
+                <input
+                  type="text"
+                  placeholder="Search by client, policy no, or registration..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                />
+              </div>
             </label>
 
             {/* Filter Toggle */}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+              className="flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors md:ml-auto"
             >
               <Filter size={16} className="mr-2" />
               Filters
@@ -316,8 +314,178 @@ const PolicyTable = ({ policies, setPolicies }) => {
           )}
         </div>
 
-        {/* Table */}
-        <div className="overflow-x-auto">
+
+
+          {/* Sort Options for Mobile View */}
+<div className="md:hidden px-4 py-2 flex justify-between items-center bg-gray-50 border-b border-gray-200">
+  <label className="text-sm font-medium text-gray-700">
+    Sort by:
+  </label>
+  <select
+    value={sortConfig?.key === 'status' ? sortConfig.direction : ''}
+    onChange={(e) => {
+      const direction = e.target.value;
+      if (direction === 'ascending' || direction === 'descending') {
+        setSortConfig({ key: 'status', direction });
+      } else {
+        setSortConfig(null);
+      }
+    }}
+    className="ml-2 px-3 py-1.5 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  >
+    <option value="">Default</option>
+    <option value="ascending">Status: Fewest Days Left</option>
+    <option value="descending">Status: Most Days Left</option>
+  </select>
+</div>
+
+
+{/* Clear sorting */}
+{(selectedClient || selectedRegistration) && (
+  <div className="md:hidden px-4 py-2">
+    <button
+      onClick={clearFilters}
+      className="text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 px-3 py-1 rounded-lg border border-gray-300"
+    >
+      <X size={14} className="inline mr-1" />
+      Clear Filters
+    </button>
+  </div>
+)}
+
+
+
+        {/* Table/Card View */}
+        <div className="overflow-x-auto md:hidden"> {/* Hide table on small screens */}
+          {sortedPolicies.length === 0 ? (
+            <div className="px-6 py-16 text-center">
+              <div className="flex flex-col items-center justify-center">
+                <div className="bg-gray-100 rounded-full p-4 mb-4">
+                  <FileText size={48} className="text-gray-400" />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No policies found</h3>
+                <p className="text-sm text-gray-500 max-w-md">
+                  {searchTerm || selectedClient || selectedRegistration || selectedStatus
+                    ? "Try adjusting your search terms or filters to find what you're looking for."
+                    : "Get started by adding your first insurance policy."}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="h-[70vh] overflow-y-auto px-4"> {/* Or adjust height as needed */}
+            <div className="divide-y divide-gray-100">
+              {sortedPolicies.map((policy) => {
+                const daysLeft = calculateDaysLeft(policy.expire);
+                const daysSinceExpired = daysLeft < 0 ? Math.abs(daysLeft) : null;
+                const statusInfo = getStatusInfo(daysLeft);
+                const StatusIcon = statusInfo.icon;
+
+                const isExpanded = expandedPolicy === policy._id;
+
+                return (
+                  <div key={policy._id} className="p-4 bg-white hover:bg-blue-50 transition-colors duration-200">
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+
+
+                          <button
+                              onClick={() => handleClientClick(policy.client)}
+                              className={`font-semibold text-left flex items-center transition-colors ${
+                                selectedClient === policy.client
+                                  ? 'text-blue-700 bg-blue-100 px-1 py-0.5 rounded'
+                                  : 'text-gray-900 hover:text-blue-600'
+                              }`}
+                            >
+                              <Users size={16} className="mr-2 text-gray-400" /> {policy.client}
+                            </button>
+
+
+                        <div className="text-sm text-gray-600 mt-1 flex items-center">
+                          <FileText size={14} className="mr-2 text-gray-400" /> Policy No: <span className="font-mono ml-1">{policy.policyno}</span>
+                        </div>
+
+                        {/* <div className="text-sm text-gray-600 mt-1 flex items-center">
+                          <Car size={14} className="mr-2 text-gray-400" /> Reg: <span className="font-mono ml-1">{policy.registration}</span>
+                        </div> */}
+
+                          <button
+                            onClick={() => handleRegistrationClick(policy.registration)}
+                            className={`text-sm flex items-center mt-1 transition-colors ${
+                              selectedRegistration === policy.registration
+                                ? 'text-blue-700 bg-blue-100 px-1 py-0.5 rounded'
+                                : 'text-gray-600 hover:text-blue-600'
+                            }`}
+                          >
+                            <Car size={14} className="mr-2 text-gray-400" /> Reg: <span className="font-mono ml-1">{policy.registration}</span>
+                          </button>
+
+
+
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <div
+                          className="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold shadow-sm border mb-2"
+                          style={{
+                            color: statusInfo.color,
+                            backgroundColor: statusInfo.bgColor,
+                            borderColor: statusInfo.color + '30'
+                          }}
+                        >
+                          <StatusIcon size={10} className="mr-1" />
+                          <span>
+                            {daysLeft >= 0
+                              ? `${daysLeft} days left`
+                              : `Expired ${daysSinceExpired} days ago`
+                            }
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => setExpandedPolicy(isExpanded ? null : policy._id)}
+                          className="text-gray-500 hover:text-blue-600 p-1.5 rounded-full hover:bg-gray-100 transition-colors"
+                          title={isExpanded ? "Show less" : "Show more"}
+                        >
+                          {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                        </button>
+                      </div>
+                    </div>
+
+                    {isExpanded && (
+                      <div className="mt-4 pt-3 border-t border-gray-100 text-sm text-gray-700">
+                        <div className="flex items-center mb-2">
+                          <Calendar size={14} className="mr-2 text-gray-400" />
+                          <span className="font-medium">Created:</span> {new Date(policy.createdAt).toLocaleDateString()}
+                        </div>
+                        <div className="flex items-center mb-2">
+                          <Calendar size={14} className="mr-2 text-green-500" />
+                          <span className="font-medium">Start Date:</span> {new Date(policy.start).toLocaleDateString()}
+                        </div>
+                        <div className="flex items-center mb-2">
+                          <Calendar size={14} className="mr-2 text-red-500" />
+                          <span className="font-medium">Expire Date:</span> {new Date(policy.expire).toLocaleDateString()}
+                        </div>
+                        <div className="text-right mt-4">
+                          <button
+                            onClick={() => deletePolicy(policy._id)}
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2.5 rounded-lg transition-all duration-200"
+                            title="Delete policy"
+                          >
+                            <Trash2 size={16} className="inline-block mr-1" /> Delete
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            </div>
+          )}
+        </div>
+
+        {/* Original Table (for larger screens) */}
+<div className="hidden md:block">
+<div className="max-h-[70vh] overflow-y-auto border-t border-b border-gray-200">
+
           <table className="w-full">
             <thead>
               <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b-2 border-gray-200">
@@ -328,7 +496,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
                   { key: 'registration', label: 'Registration', icon: Car },
                   { key: 'start', label: 'Start Date', icon: Calendar },
                   { key: 'expire', label: 'Expire Date', icon: Calendar },
-                  { key: 'status', label: 'Status', icon: AlertTriangle }, // Added key for status sorting
+                  { key: 'status', label: 'Status', icon: AlertTriangle },
                   { key: null, label: 'Actions', icon: null },
                 ].map(({ key, label, icon: Icon }) => (
                   <th
@@ -343,7 +511,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
                       <span className="font-semibold">{label}</span>
                       {key && sortConfig?.key === key && (
                         <div className="flex flex-col">
-                          {sortConfig.direction === 'ascending' 
+                          {sortConfig.direction === 'ascending'
                             ? <ChevronUp size={14} className="text-blue-600" />
                             : <ChevronDown size={14} className="text-blue-600" />
                           }
@@ -386,10 +554,10 @@ const PolicyTable = ({ policies, setPolicies }) => {
                           {new Date(policy.createdAt).toLocaleDateString()}
                         </div>
                       </td>
-                      <td 
+                      <td
                         className={`px-6 py-4 whitespace-nowrap text-sm font-semibold cursor-pointer transition-all duration-200 border-r border-gray-100 ${
-                          selectedClient === policy.client 
-                            ? 'text-blue-700 bg-blue-100' 
+                          selectedClient === policy.client
+                            ? 'text-blue-700 bg-blue-100'
                             : 'text-gray-900 hover:text-blue-600 hover:bg-blue-50'
                         }`}
                         onClick={() => handleClientClick(policy.client)}
@@ -405,10 +573,10 @@ const PolicyTable = ({ policies, setPolicies }) => {
                           {policy.policyno}
                         </div>
                       </td>
-                      <td 
+                      <td
                         className={`px-6 py-4 whitespace-nowrap text-sm font-semibold cursor-pointer transition-all duration-200 border-r border-gray-100 ${
-                          selectedRegistration === policy.registration 
-                            ? 'text-blue-700 bg-blue-100' 
+                          selectedRegistration === policy.registration
+                            ? 'text-blue-700 bg-blue-100'
                             : 'text-gray-900 hover:text-blue-600 hover:bg-blue-50'
                         }`}
                         onClick={() => handleRegistrationClick(policy.registration)}
@@ -431,17 +599,17 @@ const PolicyTable = ({ policies, setPolicies }) => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap border-r border-gray-100">
-                        <div 
+                        <div
                           className="inline-flex items-center px-3 py-2 rounded-full text-xs font-semibold shadow-sm border"
-                          style={{ 
-                            color: statusInfo.color, 
+                          style={{
+                            color: statusInfo.color,
                             backgroundColor: statusInfo.bgColor,
                             borderColor: statusInfo.color + '30'
                           }}
                         >
                           <StatusIcon size={12} className="mr-1.5" />
                           <span>
-                            {daysLeft >= 0 
+                            {daysLeft >= 0
                               ? `${daysLeft} days left`
                               : `Expired ${daysSinceExpired} days ago`
                             }
@@ -463,6 +631,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
               )}
             </tbody>
           </table>
+        </div>
         </div>
       </div>
     </>
