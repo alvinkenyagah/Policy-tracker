@@ -350,7 +350,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
               ))}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-100">
+          <tbody className="bg-white  divide-gray-100">
             {sortedPolicies.length === 0 ? (
               <tr>
                 <td colSpan="8" className="px-6 py-16 text-center">
