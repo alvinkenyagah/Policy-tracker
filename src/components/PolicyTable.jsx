@@ -185,7 +185,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
         </div>
 
         {/* Summary Footer */}
-        <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
+        {/* <div className="bg-gray-50 px-6 py-4 border-t border-gray-200">
           <div className="flex flex-wrap gap-4 text-sm text-gray-600">
             <div className="flex items-center">
               <CheckCircle size={16} className="mr-1 text-green-600" />
@@ -203,7 +203,7 @@ const PolicyTable = ({ policies, setPolicies }) => {
               Expired: {sortedPolicies.filter(p => calculateDaysLeft(p.expire) < 0).length}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Search and Filters */}
         <div className="p-6 border-b border-gray-200">

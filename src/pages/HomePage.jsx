@@ -1,6 +1,10 @@
 import React, { useState, Fragment } from 'react';
 import { FileText, Plus, BarChart3, Shield, X } from 'lucide-react';
 import PolicyTable from "../components/PolicyTable";
+import ExpiredPoliciesStat from '../components/ExpiredPolicyStat';
+import { DetailedExpiredPoliciesStat } from '../components/ExpiredPolicyStat';
+
+import NonCoveredVehiclesList from '../components/NonCoveredVehicles';
 
 // Modal Component
 const Modal = ({ isOpen, onClose, children }) => {
@@ -391,25 +395,13 @@ function HomePage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium text-gray-600">Expired Policies</p>
-                  <p className="text-2xl font-bold text-red-600">
-                    {policies.filter(policy => {
-                      const expireDate = new Date(policy.expire);
-                      const today = new Date();
-                      return expireDate <= today;
-                    }).length}
-                  </p>
-                </div>
-                <div className="bg-red-100 p-3 rounded-lg">
-                  <Shield className="h-6 w-6 text-red-600" />
-                </div>
-              </div>
-            </div>
+              {/* <ExpiredPoliciesStat policies={policies} /> */}
+              <DetailedExpiredPoliciesStat policies={policies} />
+
           </div>
         </div>
+
+        <NonCoveredVehiclesList policies={policies} />
 
         {/* Policy Table */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
